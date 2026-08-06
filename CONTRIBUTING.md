@@ -180,9 +180,9 @@ This path assumes Node, Rust, Docker, and Git are already installed.
 ### 1. Fork and clone
 
 ```bash
-git clone https://github.com/YOUR_USERNAME/stellar-trust-escrow.git
-cd stellar-trust-escrow
-git remote add upstream https://github.com/barry01-hash/stellar-trust-escrow.git
+git clone https://github.com/YOUR_USERNAME/Stellar-smart-fund-escrow.git
+cd Stellar-smart-fund-escrow
+git remote add upstream https://github.com/Stellar-Smart-Fund/Stellar-smart-fund-escrow.git
 ```
 
 ### 2. Install workspace dependencies
@@ -433,9 +433,9 @@ Use GitHub labels to find a good starting point:
 
 Useful searches:
 
-- Good first issues: `https://github.com/barry01-hash/stellar-trust-escrow/issues?q=is%3Aopen+is%3Aissue+label%3A%22good-first-issue%22`
-- Documentation issues: `https://github.com/barry01-hash/stellar-trust-escrow/issues?q=is%3Aopen+is%3Aissue+label%3Adocumentation`
-- Help wanted: `https://github.com/barry01-hash/stellar-trust-escrow/issues?q=is%3Aopen+is%3Aissue+label%3A%22help+wanted%22`
+- Good first issues: `https://github.com/Stellar-Smart-Fund/Stellar-smart-fund-escrow/issues?q=is%3Aopen+is%3Aissue+label%3A%22good+first+issue%22`
+- Documentation issues: `https://github.com/Stellar-Smart-Fund/Stellar-smart-fund-escrow/issues?q=is%3Aopen+is%3Aissue+label%3Adocumentation`
+- Help wanted: `https://github.com/Stellar-Smart-Fund/Stellar-smart-fund-escrow/issues?q=is%3Aopen+is%3Aissue+label%3A%22help+wanted%22`
 
 If you want an issue, leave a comment so maintainers know it is in progress.
 
@@ -483,3 +483,14 @@ npx playwright install --with-deps chromium firefox
 ```
 
 Questions are welcome in the issue tracker or pull request discussion. Small first contributions are absolutely fine.
+
+## Getting Help
+
+If you are stuck or have a question:
+
+- **Open a GitHub Discussion** — use the [Discussions tab](https://github.com/Stellar-Smart-Fund/Stellar-smart-fund-escrow/discussions) for open-ended questions, design ideas, or anything that does not fit a bug report or feature request.
+- **Comment on the issue** — if you are working on an existing issue, drop a comment and a maintainer will respond.
+- **Check existing issues and PRs** — your question may already be answered in a closed thread.
+- **Read the architecture overview** — [`ARCHITECTURE.md`](ARCHITECTURE.md) explains how the contracts, backend, and frontend fit together.
+
+Response times vary, but most comments receive a reply within a few business days.
