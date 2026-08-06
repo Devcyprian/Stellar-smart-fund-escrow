@@ -63,6 +63,24 @@ const DANGEROUS_DEFAULTS = [
   'your_secret_here',
 ];
 
+/**
+ * Estimate Shannon entropy (bits) of a string.
+ * A random 32-byte value has ~256 bits of entropy; a 32-char alphanumeric
+ * string has ~190 bits. We require >= 128 bits as a practical floor.
+ */
+function shannonEntropy(str) {
+  const freq = {};
+  for (const ch of str) freq[ch] = (freq[ch] || 0) + 1;
+  const len = str.length;
+  return Object.values(freq).reduce((sum, count) => {
+    const p = count / len;
+    return sum - p * Math.log2(p);
+  }, 0) * len; // total bits ≈ entropy-per-char × length
+}
+
+const JWT_SECRETS = ['JWT_SECRET', 'JWT_REFRESH_SECRET', 'MFA_SECRET'];
+const MIN_ENTROPY_BITS = 128;
+
 const errors = [];
 const warnings = [];
 
@@ -88,6 +106,19 @@ for (const spec of REQUIRED) {
     if (value.toLowerCase().includes(bad)) {
       errors.push(`  ✗ ${spec.key} — contains a known insecure default ("${bad}")`);
       break;
+    }
+  }
+}
+
+// Entropy checks for JWT secrets
+for (const key of JWT_SECRETS) {
+  const value = process.env[key];
+  if (value && value.length >= 32) {
+    const bits = shannonEntropy(value);
+    if (bits < MIN_ENTROPY_BITS) {
+      errors.push(
+        `  ✗ ${key} — insufficient entropy (${bits.toFixed(1)} bits, need ≥ ${MIN_ENTROPY_BITS}); use a randomly generated secret`,
+      );
     }
   }
 }
