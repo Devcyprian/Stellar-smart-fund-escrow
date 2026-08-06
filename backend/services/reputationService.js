@@ -7,11 +7,42 @@ const BADGE_THRESHOLDS = {
 
 import prisma from '../lib/prisma.js';
 
+/**
+ * In-memory reputation cache with a 10-second TTL.
+ *
+ * Reputation scores are read on every page render and leaderboard request.
+ * A short TTL cache avoids hammering the database (or Soroban RPC for
+ * on-chain lookups) while keeping displayed scores fresh enough for all
+ * practical purposes. Cache entries are keyed by wallet address and
+ * automatically expire; no explicit invalidation is needed for reads.
+ */
+const _reputationCache = new Map();
+const REPUTATION_CACHE_TTL_MS = 10_000; // 10 seconds
+
+function _cacheGet(address) {
+  const entry = _reputationCache.get(address);
+  if (!entry) return null;
+  if (Date.now() - entry.ts > REPUTATION_CACHE_TTL_MS) {
+    _reputationCache.delete(address);
+    return null;
+  }
+  return entry.value;
+}
+
+function _cacheSet(address, value) {
+  _reputationCache.set(address, { value, ts: Date.now() });
+}
+
 const getReputationByAddress = async (address) => {
+  const cached = _cacheGet(address);
+  if (cached !== null) return cached;
+
   const record = await prisma.reputationRecord.findUnique({
     where: { address },
   });
-  return record || null;
+  const result = record || null;
+  _cacheSet(address, result);
+  return result;
 };
 
 const getBadge = (score) => {
